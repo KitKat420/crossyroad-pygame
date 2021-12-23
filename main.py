@@ -18,25 +18,30 @@ pygame.display.set_caption("Crossy Roads")
 player_img = pygame.transform.scale(
     pygame.image.load("./Assets/pizza.png", "player"), (50, 50))
 
+car_img = pygame.transform.scale(
+    pygame.image.load("./Assets/tesla-model-car.png", "car"), (50, 50))
+
 
 def player_move(player, key_pressed):
     if key_pressed[K_w]:
-        print("moved up")
         player.y -= STEP
 
 
 def draw_window(player, rect):
     pygame.Surface.fill(WINDOW, WHITE)
+    # drawing player using image asset and applying rect attributes to the image
     WINDOW.blit(player, rect)
+    WINDOW.blit(car_img, (100, 100))
     pygame.display.update()
 
 
 def main():
     is_game_on = True
-    rect_of_player = pygame.Surface.get_rect(player_img)
-    rect_of_player.x = WIDTH / 2 - 50
-    rect_of_player.y = HEIGHT - 50
-    pygame.draw.rect(WINDOW, 0, rect_of_player, )
+    # basically converting Surface object into a Rect object
+    player_as_rect = pygame.Surface.get_rect(player_img)
+    # setting starting position of player
+    player_as_rect.x = WIDTH / 2 - 50
+    player_as_rect.y = HEIGHT - 50
 
     while is_game_on:
         clock.tick(FPS)
@@ -44,8 +49,8 @@ def main():
             if event.type == pygame.QUIT:
                 is_game_on = False
 
-        player_move(rect_of_player, pygame.key.get_pressed())
-        draw_window(player_img, rect_of_player)
+        player_move(player_as_rect, pygame.key.get_pressed())
+        draw_window(player_img, player_as_rect)
     pygame.display.quit()
 
 
