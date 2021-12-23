@@ -15,8 +15,10 @@ vehicle_images = ["./Assets/tesla-model-bus.png",
 
 clock = pygame.time.Clock()
 
+list_of_vehicles = []
+
 STEP = 5
-FPS = 60
+FPS = 8
 WIDTH, HEIGHT = 800, 500
 WHITE = (255, 255, 255)
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -29,7 +31,6 @@ for vehicle in vehicle_images:
         pygame.image.load(vehicle), (125, 125))
     vehicles.append(transform_image)
 
-print(vehicles)
 
 player_img = pygame.transform.scale(
     pygame.image.load("./Assets/pizza.png", "player"), (50, 50))
@@ -40,12 +41,21 @@ def player_move(player, key_pressed):
         player.y -= STEP
 
 
-def draw_window(player, player_rect, vehicle, vehicle_rect):
+def vehicle_move(vehicle):
+    vehicle.x -= STEP
+
+
+def draw_window(player_surface, player_rect, vehicle_surface, vehicle_rect, ycor):
     pygame.Surface.fill(WINDOW, WHITE)
     # drawing player using image asset and applying rect attributes to the image
-    WINDOW.blit(player, player_rect)
-    WINDOW.blit(vehicle, vehicle_rect)
-    pygame.display.update()
+    WINDOW.blit(player_surface, player_rect)
+    vehicle_rect.y = ycor
+    list_of_vehicles.append(vehicle_surface)
+
+    WINDOW.blit(vehicle_surface,
+                (vehicle_rect.x, vehicle_rect.y))
+
+    pygame.display.flip()
 
 
 def main():
@@ -56,19 +66,25 @@ def main():
     player_as_rect.x = WIDTH / 2 - 50
     player_as_rect.y = HEIGHT - 50
 
-    # Vehicle stuff
-    random_vehicle = random.choice(vehicles)
-    vehicle_as_rect = pygame.Surface.get_rect(random_vehicle)
-
     while is_game_on:
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 is_game_on = False
 
+        # Generates random y coordinate for vehicles
+        random_position = random.randint(20, HEIGHT - 100)
+
+        # Vehicle stuff
+        vehicle_img = random.choice(vehicles)
+        vehicle_as_rect = pygame.Surface.get_rect(vehicle_img)
+
+        vehicle_as_rect.x = WIDTH - 100
+
         player_move(player_as_rect, pygame.key.get_pressed())
+        # vehicle_move(vehicle_as_rect)
         draw_window(player_img, player_as_rect,
-                    random_vehicle, vehicle_as_rect)
+                    vehicle_img, vehicle_as_rect, random_position)
     pygame.display.quit()
 
 
