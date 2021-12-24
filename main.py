@@ -4,8 +4,20 @@ from pygame import transform
 from pygame.draw import rect
 from pygame.constants import K_w
 import random
-
+import time
 pygame.init()
+
+image_paths = ["./Assets/tesla-model-bus.png",
+               "./Assets/tesla-model-car.png",
+               "./Assets/tesla-model-convertable.png",
+               "./Assets/tesla-model-ems.png",
+               "./Assets/tesla-model-pickup.png"]
+
+car_images = []
+
+for image in image_paths:
+    car_images.append(pygame.transform.scale(
+        pygame.image.load(image), (125, 125)))
 
 
 clock = pygame.time.Clock()
@@ -20,6 +32,7 @@ pygame.display.set_caption("Crossy Roads")
 
 player_img = pygame.transform.scale(
     pygame.image.load("./Assets/pizza.png", "player"), (50, 50))
+bg_img = pygame.image.load("./Assets/mountain-bg.jpg", "mountain-bg")
 
 
 def player_move(player, key_pressed):
@@ -29,11 +42,11 @@ def player_move(player, key_pressed):
 
 def draw_window(player_surface, player_rect, cars):
     # drawing player using image asset and applying rect attributes to the image
-    WINDOW.fill(WHITE)
+    WINDOW.blit(bg_img, (0, 0))
     WINDOW.blit(player_surface, player_rect)
 
-    for i in cars:
-        pygame.draw.rect(WINDOW, BLACK, i)
+    for car in cars:
+        WINDOW.blit(car[0], car[1])
     pygame.display.flip()
 
 
@@ -45,27 +58,30 @@ def main():
     # setting starting position of player
     player_as_rect.x = WIDTH / 2 - 50
     player_as_rect.y = HEIGHT - 50
-
     my_event = pygame.USEREVENT + 1
-    pygame.time.set_timer(my_event, 5000)
-
+    pygame.time.set_timer(my_event, 1000)
     while is_game_on:
         clock.tick(FPS)
+
+        random_car = random.choice(car_images)
+        car_as_rect = random_car.get_rect()
+        car_as_rect.y = random.randint(50, HEIGHT - 125)
+        car_as_rect.x = WIDTH - 100
+        car = (random_car, car_as_rect)
 
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
                 is_game_on = False
             elif event.type == my_event:
-                pass
-        car = pygame.Rect(WIDTH - 100, HEIGHT - 50, 75, 20)
-        car.y = random.randint(50, HEIGHT - 50)
-        cars.append(car)
+
+                cars.append(car)
+
         player_move(player_as_rect, pygame.key.get_pressed())
         draw_window(player_img, player_as_rect, cars)
 
         for car in cars:
-            car.x -= 5
+            car[1].x -= 5
     pygame.display.quit()
 
 
