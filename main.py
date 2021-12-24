@@ -13,6 +13,7 @@ pygame.display.set_caption("Crossy Roads")
 
 pygame.init()
 
+spawn_rate = 1000
 scoreboard = Scoreboard()
 
 font = pygame.font.Font("./Assets/PressStart2P-Regular.ttf", 25)
@@ -50,8 +51,10 @@ def home(player_rect):
 
 
 def draw_window(player_surface, player_rect, cars):
+    global spawn_rate
+    highscore = int(open("highscores.txt", "r").read())
     scoreboard_text = font.render(
-        f"SCORE: {scoreboard.current_score}", False, BLACK)
+        f"SCORE: {scoreboard.current_score} HIGHSCORE: {highscore}", False, BLACK)
     # drawing player using image asset and applying rect attributes to the image
     WINDOW.blit(bg_img, (0, 0))
     WINDOW.blit(player_surface, player_rect)
@@ -63,6 +66,7 @@ def draw_window(player_surface, player_rect, cars):
         if car[1].collidepoint(player_rect.x, player_rect.y + 50):
             WINDOW.blit(game_over_text, (WIDTH / 2 -
                         game_over_text.get_width() / 2, 200))
+            scoreboard.highscores()
             scoreboard.current_score = 0
             home(player_rect)
 
@@ -73,6 +77,7 @@ def draw_window(player_surface, player_rect, cars):
 
 
 def main():
+    global spawn_rate
     is_game_on = True
     cars = []
     # basically converting Surface object into a Rect object
@@ -81,11 +86,9 @@ def main():
     player_as_rect.x = WIDTH / 2 - 50
     player_as_rect.y = HEIGHT - 50
     my_event = pygame.USEREVENT + 1
-
-    pygame.time.set_timer(my_event, 1000)
+    pygame.time.set_timer(my_event, spawn_rate)
     while is_game_on:
         clock.tick(FPS)
-
         random_car = random.choice(car_images)
         car_as_rect = random_car.get_rect()
         car_as_rect.y = random.randint(50, HEIGHT - 125)
