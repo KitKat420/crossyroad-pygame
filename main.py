@@ -1,7 +1,6 @@
 import pygame
 from pygame import key
 from pygame import transform
-from pygame.draw import rect
 from pygame.constants import K_w
 import random
 import time
