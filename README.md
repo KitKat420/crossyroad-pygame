@@ -8,7 +8,7 @@ Crossy Road is an arcade video game released on 20 November 2014. It was develop
 
 ## crossyroad-pygame functionality 
 
-My version of Crossy Road uses the library, Pygame, that allowed me to implement key controls; an automated car system and paddle; a scoring system and a win condition. I also went a bit further and used the open method to persist highscores.
+My version of Crossy Road uses the library, Pygame, that allowed me to implement key controls; an automated car system; a scoring system and a win condition. I also went a bit further and used the open method to persist highscores.
 
 ## Dependencies
 
