@@ -1,6 +1,6 @@
 # crossyroad-pygame
 
-![crossyroad-img](https://githubimagebucket.s3.us-east-2.amazonaws.com/crossy-road-img.png)
+![crossyroad-img](https://githubimagebucket.s3.us-east-2.amazonaws.com/Untitled-1.png)
 
 ## History
 
